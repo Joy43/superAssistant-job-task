@@ -16,4 +16,6 @@ const QuestionTypes = ({ addQuestion }) => {
       </div>
     );
   };
+  
   export default QuestionTypes;
+  

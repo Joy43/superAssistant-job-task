@@ -1,5 +1,5 @@
-import { DndProvider, useDrag, useDrop } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
+import { useDrag, useDrop } from "react-dnd";
+
 const QuestionAll = ({ question, index, moveQuestion, questions, setQuestions }) => {
   const [, ref] = useDrop({
     accept: "question",
@@ -24,7 +24,19 @@ const QuestionAll = ({ question, index, moveQuestion, questions, setQuestions })
 
   const handleOptionChange = (e, optionIndex) => {
     const updatedQuestions = [...questions];
-    updatedQuestions[index].selectedOption = e.target.value;
+    updatedQuestions[index].options[optionIndex] = e.target.value;
+    setQuestions(updatedQuestions);
+  };
+
+  const handleClozeChange = (e) => {
+    const updatedQuestions = [...questions];
+    updatedQuestions[index].clozeText = e.target.value;
+    setQuestions(updatedQuestions);
+  };
+
+  const handlePassageChange = (e) => {
+    const updatedQuestions = [...questions];
+    updatedQuestions[index].passage = e.target.value;
     setQuestions(updatedQuestions);
   };
 
@@ -36,34 +48,53 @@ const QuestionAll = ({ question, index, moveQuestion, questions, setQuestions })
         className="w-full border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-blue-500"
         placeholder={`Enter ${question.type} question`}
       />
-
       {question.type === "Categorize" && (
         <div className="mt-3 space-y-2">
           {question.options.map((option, i) => (
             <div key={i} className="flex items-center space-x-2">
               <input
-                type="radio"
-                name={`question-${question.id}`}
+                type="text"
                 value={option}
                 onChange={(e) => handleOptionChange(e, i)}
+                className="border border-gray-300 p-2 rounded-md w-full"
+                placeholder={`Option ${i + 1}`}
               />
-              <label>{option}</label>
             </div>
           ))}
         </div>
       )}
-
-      {question.type === "Cloze" && <p className="mt-2 text-gray-700">{question.clozeText.replace(/____/g, "______")}</p>}
+      {question.type === "Cloze" && (
+        <div>
+          <input
+            type="text"
+            value={question.clozeText}
+            onChange={handleClozeChange}
+            className="w-full border border-gray-300 p-2 rounded-lg"
+            placeholder="Enter Cloze text"
+          />
+        </div>
+      )}
       {question.type === "Comprehension" && (
-        <div className="mt-3">
-          <p className="italic text-gray-600">{question.passage}</p>
+        <div>
+          <textarea
+            value={question.passage}
+            onChange={handlePassageChange}
+            className="w-full border border-gray-300 p-2 rounded-lg"
+            placeholder="Enter Passage"
+          />
           {question.questions.map((subQuestion, j) => (
-            <p key={j} className="text-gray-700">{subQuestion}</p>
+            <textarea
+              key={j}
+              value={subQuestion}
+              onChange={(e) => handleOptionChange(e, j)}
+              className="w-full border border-gray-300 p-2 mt-2 rounded-lg"
+              placeholder={`Question ${j + 1}`}
+            />
           ))}
         </div>
       )}
     </div>
   );
 };
-export default QuestionAll;
 
+export default QuestionAll;

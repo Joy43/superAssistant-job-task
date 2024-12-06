@@ -7,8 +7,9 @@ import PreviewForm from '../../../compoents/PreviewFrom';
 const Home = () => {
   return (
 <>
-<Banner/>
+
 <FormEditor/>
+<Banner/>
 <PreviewForm/>
 </>
   )
