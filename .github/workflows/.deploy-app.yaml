@@ -2,7 +2,7 @@ name: Ready the code and deploy
 
 on:
   pull_request:
-    types: opened
+    types: [opened]
   push:
     branches:
       - "main"
@@ -12,44 +12,29 @@ jobs:
   test-code:
     runs-on: ubuntu-latest
     steps:
-      - name: copying the codes
-        uses: actions/checkout@v4
-
-      - name: install node-js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20.15
-
-      - name: check node version
-        run: node -v
-
-      - name: install dependencies
-        run: npm install --frozen-lockfile
-
-      - name: Run the tests
-        run: npm test
+      - run: npm ci
+      - name: Run tests
+        run: npm test  # Make sure package.json has "test" script or placeholder
 
   build-code:
     runs-on: ubuntu-latest
     needs: test-code
     steps:
-      - name: install node-js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20.15
-
-      - name: copying the codes
-        uses: actions/checkout@v4
-
-      - name: install dependencies
-        run: npm install --frozen-lockfile
-
-      - name: Build the codes
-        run: npm build
+      - run: npm ci
+      - name: Build project
+        run: npm run build  # <-- corrected
 
   deploy-code:
     runs-on: ubuntu-latest
     needs: build-code
     steps:
-      - name: Deploy the codes
-        run: echo "deploying...."
+      - name: Deploy
+        run: echo "Add your deployment commands here"
