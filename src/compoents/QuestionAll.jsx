@@ -41,7 +41,7 @@ const QuestionAll = ({ question, index, moveQuestion, questions, setQuestions })
   };
 
   return (
-    <div ref={(node) => drag(ref(node))} className="p-4 bg-white rounded-lg shadow-md mb-4 border-2 border-gray-200 hover:border-blue-500 transition-all">
+    <div ref={(node) => drag(ref(node))} className="p-4 bg-white rounded-lg shadow-sm mb-4 border-2 border-gray-200 hover:border-blue-500 transition-all">
       <textarea
         value={question.content}
         onChange={handleContentChange}
